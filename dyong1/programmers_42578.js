@@ -8,10 +8,7 @@ function solution(clothes) {
     }
     clothesByType[c[1]].push(c[0]);
   }
-  return (
-    Object.values(clothesByType).reduce((acc, cc) => acc * (cc.length + 1), 1) -
-    1
-  );
+  return Object.values(clothesByType).reduce((acc, cc) => acc * (cc.length + 1), 1) - 1;
 }
 
 // backtracking: failed for low performance
