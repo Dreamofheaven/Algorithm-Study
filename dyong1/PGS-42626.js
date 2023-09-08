@@ -1,14 +1,24 @@
 function solution(scoville, K) {
-  const m = minHeap(scoville.filter((s) => s < K));
+  const m = minHeap();
+  for (const s of scoville) {
+    m.add(s);
+  }
+
   let mixCount = 0;
-  while (m.size() > 0) {
+  let lastMix = -1;
+  // decreasing
+  while (m.peek() < K && m.size() > 1) {
     const min1 = m.pop();
     const min2 = m.pop();
     const mix = min1 + min2 * 2;
-    if (mix < K) {
-      m.add(mix);
-    }
+
+    m.add(mix);
+
     mixCount++;
+    lastMix = mix;
+  }
+  if (m.peek() < K) {
+    return -1;
   }
   return mixCount;
 }
@@ -22,6 +32,7 @@ function minHeap(_arr) {
     arr[a] = arr[b];
     arr[b] = tmp;
   };
+  const peek = () => arr[0];
   const pop = () => {
     if (arr.length == 0) {
       return null;
@@ -39,38 +50,19 @@ function minHeap(_arr) {
       if (node == null) {
         break;
       }
-      if (left == null && right == null) {
+      if (left == null) {
         break;
       }
-      if (left != null && right == null) {
-        if (left < node) {
-          swap(i, leftAt(i));
-          i = leftAt(i);
-          continue;
-        }
+
+      let smallerAt = leftAt(i);
+      if (right != null && left > right) {
+        smallerAt = rightAt(i);
+      }
+      if (node <= arr[smallerAt]) {
         break;
       }
-      if (left == null && right != null) {
-        if (right < node) {
-          swap(i, rightAt(i));
-          i = rightAt(i);
-          continue;
-        }
-        break;
-      }
-      if (left >= node && right >= node) {
-        break;
-      }
-      if (left < node) {
-        swap(i, leftAt(i));
-        i = leftAt(i);
-        continue;
-      }
-      if (right < node) {
-        swap(i, rightAt(i));
-        i = rightAt(i);
-        continue;
-      }
+      swap(i, smallerAt);
+      i = smallerAt;
     }
 
     return peek;
@@ -93,12 +85,9 @@ function minHeap(_arr) {
   };
   const size = () => arr.length;
 
-  for (const a of _arr) {
-    add(a);
-  }
-
   return {
     _arr: arr,
+    peek,
     pop,
     add,
     size,
