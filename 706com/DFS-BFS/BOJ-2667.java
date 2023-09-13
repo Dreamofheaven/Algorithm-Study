@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class _2667 {
+public class _2667_단지번호붙이기 {
 
     static int N;
     static int[][] arr;
