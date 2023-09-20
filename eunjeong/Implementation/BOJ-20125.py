@@ -7,5 +7,6 @@ for _ in range(N):
     a.append(input())
 print(a)
 
+# 다시 풀기
 
         
